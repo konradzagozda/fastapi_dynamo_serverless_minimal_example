@@ -1,3 +1,5 @@
+org: hexocean
+app: template
 frameworkVersion: "3"
 
 service: example-service

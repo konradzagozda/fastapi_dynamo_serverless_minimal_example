@@ -12,10 +12,10 @@ dynamodb_client = boto3.client('dynamodb')
 @app.get("/")
 async def root():
     dynamodb_client.put_item(
-        TableName='Items', Item={'itemId': {'S': 1}, 'name': {'S': 'item1'}}
+        TableName='Items', Item={'itemId': {'S': '1'}, 'name': {'S': 'item1'}}
     )
     item = dynamodb_client.get_item(
-        TableName='Items', Key={'userId': {'S': 1}}
+        TableName='Items', Key={'userId': {'S': '1'}}
     ).get('Item')
 
     KEY = os.getenv('KEY')
