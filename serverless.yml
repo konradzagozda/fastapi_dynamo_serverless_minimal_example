@@ -1,0 +1,47 @@
+frameworkVersion: "3"
+
+service: example-service
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-2
+  httpApi:
+      cors: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ ItemsTable, Arn ]
+
+functions:
+    app:
+        handler: src/main.handler
+        events:
+            - httpApi: '*'
+
+resources:
+  Resources:
+    ItemsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: itemId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: itemId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: Items
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
